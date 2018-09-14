@@ -19,14 +19,13 @@ setopt histignorealldups sharehistory
 setopt no_tify
 
 # Use emacs keybindings even if our EDITOR is set to vi
-bindkey -e
+bindkey -v
 
 # directory color
-eval "$(dircolors ~/.dircolors)"
-
-# use direnv
-export EDITOR=vim
-eval "$(direnv hook zsh)"
+if [ -f ~/.dircolors ]; then
+	eval "$(dircolors ~/.dircolors)"
+fi
+alias ls='ls -G'
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
@@ -115,5 +114,3 @@ fi
 # load and path
 zplug load --verbose
 
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
