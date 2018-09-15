@@ -116,6 +116,11 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# disable Ctrl+S keybind
+if [[ -t 0 ]]; then
+  stty stop undef
+  stty start undef
+fi
 
 # for cuda
 export PATH="/usr/local/cuda/bin:$PATH"

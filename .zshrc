@@ -1,3 +1,9 @@
+#
+if [[ -t 0 ]]; then
+  stty stop undef
+  stty start undef
+fi
+
 # language
 export LANG=ja_JP.UTF-8
 export WCWIDTH_CJK_LEGACY=yes
@@ -7,10 +13,18 @@ setopt nobeep
 
 # VCS
 autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr "%F{yellow}+"
+zstyle ':vcs_info:git:*' unstagedstr "%F{red}!"
+
+
 
 # prompt
 autoload -Uz promptinit
 promptinit
+PROMPT='%(?.%K{008}%F{002}●%f%k.%K{008}%F{001}●%f%k)[%~]
+>'
+
 
 # history
 setopt histignorealldups sharehistory
@@ -22,10 +36,10 @@ setopt no_tify
 bindkey -v
 
 # directory color
-if [ -f ~/.dircolors ]; then
+if [ -f $HOME/.dircolors ]; then
 	eval "$(dircolors ~/.dircolors)"
 fi
-alias ls='ls -G'
+alias ls='ls -F --color=always'
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
