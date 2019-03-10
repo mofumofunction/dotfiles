@@ -4,12 +4,21 @@ if [[ -t 0 ]]; then
   stty start undef
 fi
 
-# language
+# import {{{
+source ~/.bashrc
+source ~/.zplug/init.sh
+# }}}
+
+# language {{{
 export LANG=ja_JP.UTF-8
 export WCWIDTH_CJK_LEGACY=yes
+#}}}
 
-# no beep
+# no beep {{{
 setopt nobeep
+setopt nolistbeep
+# }}}
+
 
 # VCS
 autoload -Uz vcs_info
@@ -17,46 +26,48 @@ zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git:*' stagedstr "%F{yellow}+"
 zstyle ':vcs_info:git:*' unstagedstr "%F{red}!"
 
-
-
 # prompt
 autoload -Uz promptinit
 promptinit
-PROMPT='%(?.%K{008}%F{002}●%f%k.%K{008}%F{001}●%f%k)[%~]
->'
-
-
-# history
-setopt histignorealldups sharehistory
+PROMPT='%(?.%F{010}●%f.%F{009}●%f) %K{008}%F{208}%~%f%k
+>>'
 
 #
-setopt no_tify
+setopt notify
 
-# Use emacs keybindings even if our EDITOR is set to vi
+# keybind {{{ 
 bindkey -v
+# }}}
 
+# color {{{
 # directory color
 if [ -f $HOME/.dircolors ]; then
 	eval "$(dircolors ~/.dircolors)"
 fi
 alias ls='ls -F --color=always'
+# }}}
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
+# history {{{
+setopt appendhistory
+setopt histignorealldups
+setopt sharehistory
+
 HISTSIZE=1000
-
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
+# }}}
 
-# Use modern completion system
+# completion {{{
 autoload -Uz compinit
 compinit
+
+setopt magicequalsubst
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select=1
-#eval "$(dircolors -b)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
@@ -68,9 +79,10 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+zstyle ':completion:*:files' ignored-patterns '*?.o' '*?~' '*\#'
+# }}}
 
-
-source ~/.zplug/init.zsh
+# plugin {{{
 
 # terminal color
 zplug "chrissicool/zsh-256color"
@@ -128,3 +140,4 @@ fi
 # load and path
 zplug load --verbose
 
+# }}}
